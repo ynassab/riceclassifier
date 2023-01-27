@@ -1,7 +1,6 @@
 __pycache__
 Rice_Image_Dataset
 .ipynb_checkpoints
-*.ipynb
 *.png
 *.h5
 logs
