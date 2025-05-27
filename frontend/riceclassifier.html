@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="riceclassifier/scripts/riceclassifier.js"></script>
+<script src="index/scripts/load_animations.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam&display=swap" rel="stylesheet">
+
+    <link href="riceclassifier/styles/style.css" rel="stylesheet">
+    <link href="riceclassifier/styles/animations.css" rel="stylesheet">
+
+    <title>Rice Classifier</title>
+    <link rel="icon" type="image/x-icon" href="index/pictures/favicon.ico" />
+</head>
+
+<body>
+    <main>
+        <div id="yn-logo-container">
+            <a href="/projects" role="button">
+                <img id="yn-logo" src="index/pictures/favicon.png" />
+            </a>
+        </div>
+        <div id="input-panel">
+            <h1 id="title" class="phase-in">Rice Classifier</h1>
+            <div id="upload-area" class="phase-in">
+                <p>Drag and drop an image here or click to upload</p>
+                <input type="file" id="file-input" accept="image/*" style="display: none;">
+            </div>
+
+            <div id="dragndrop-explainer-container" class="phase-in">
+                <p id="dragndrop-explainer">
+                    You may also drag and drop one of the images below into the upload area. If on mobile,
+                    you may wish to save one of the images below locally, then re-upload it.
+                </p>
+            </div>
+
+            <div id="gallery" class="phase-in-delay-1">
+                <img src="index/pictures/rice/Arborio (1).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/basmati (1).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Ipsala (1).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Jasmine (1).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Karacadag (1).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Arborio (2).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/basmati (2).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Ipsala (2).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Jasmine (2).jpg" class="thumbnail" draggable="true">
+                <img src="index/pictures/rice/Karacadag (2).jpg" class="thumbnail" draggable="true">
+            </div>
+
+            <div id="loading-dot-supercontainer">
+                <div id="loading-dot-container">
+                    <div class="loading-dot" id="loading-dot-1"></div>
+                    <div class="loading-dot" id="loading-dot-2"></div>
+                    <div class="loading-dot" id="loading-dot-3"></div>
+                </div>
+            </div>
+        </div>
+        <div id="result-panel">
+            <div id="uploaded-image-container" class="phase-in-delay-2">
+                <img id="uploaded-image" class="uploaded-image" src="index/pictures/icons/generic_image.svg"
+                    alt="Uploaded image will appear here" />
+            </div>
+            <div class="result" id="result">
+                <span id="result-part1"></span>
+                <span id="result-part2"></span>
+            </div>
+        </div>
+    </main>
+    <div id="copyright-notice-container" class="phase-in">
+        <div id="copyright-notice">
+            <p>&#169; 2025 Yahia Nassab</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,304 @@
+html {
+    --default-hue: 200;
+    --default-saturation: 90%;
+    --default-lightness: 14%;
+
+    --base-color-1: hsl(var(--default-hue), var(--default-saturation), var(--default-lightness));
+    --base-color-2: hsl(calc(-160 + var(--default-hue)), var(--default-saturation), var(--default-lightness));
+    --base-color-3: hsl(calc(-180 + var(--default-hue)), var(--default-saturation), var(--default-lightness));
+    --base-color-4: hsl(var(--default-hue), var(--default-saturation), calc(var(--default-lightness) + 10%));
+
+    --light-accent-color: white;
+    --dark-accent-color: #333;
+    color: var(--light-accent-color);
+
+    --default-font-size: 1rem;
+    --variable-body-font-size: clamp(calc(0.5*var(--default-font-size)), 2.2vw, calc(1.4*var(--default-font-size)));
+
+    --input-panel-width: 60%;
+    --main-div-padding: 1vw;
+
+    --mobile-width: 320px;
+    --variable-widget-width: clamp(calc(0.75*var(--mobile-width)), 85vw, 60rem);
+
+    --upload-area-width: 65%;
+
+    --thumbnail-size: clamp(calc(0.15*var(--mobile-width)), 10vw, 6rem);
+
+    --total-loading-animation-time: 1.2s;
+    --loading-dot-size: calc(0.035*var(--variable-widget-width));
+
+    --left-margin: max(1.2rem, 1.5vw);
+    --yn-logo-top: max(1rem, 1vh);
+    --yn-logo-left: var(--left-margin);
+    --yn-logo-height: clamp(30px, 6.8vw, 4.8rem);
+
+}
+
+#yn-logo-container {
+    position: relative;
+    height: calc(var(--yn-logo-height) + var(--yn-logo-top));
+    z-index: 99;
+}
+
+#yn-logo {
+    position: absolute;
+    top: var(--yn-logo-top);
+    left: var(--yn-logo-left);
+    height: var(--yn-logo-height);
+    transition: all calc(0.15*var(--default-animation-time)) ease;
+    cursor: pointer;
+}
+
+#yn-logo:hover {
+    transform: scale(1.1);
+}
+
+/* Styling when highlighting text with cursor */
+::-moz-selection {  /* Firefox */
+    color: var(--base-color-1);
+    background: rgba(255, 255, 255, 0.75);
+}
+::selection {
+    color: var(--base-color-1);
+    background: rgba(255, 255, 255, 0.75);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: var(--variable-body-font-size);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Nunito';
+    background-color: #EEE;
+}
+
+main {
+    display: flex;
+    text-align: center;
+    padding: var(--main-div-padding);
+    min-height: 90%;
+}
+
+#input-panel {
+    width: var(--input-panel-width);
+    background-color: var(--base-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 5%;
+}
+
+#input-panel.animate {
+    animation: pulse-input-panel calc(0.5*var(--default-animation-time)) infinite alternate ease-in-out;
+}
+
+@keyframes pulse-input-panel {
+    0% {
+        background-color: var(--base-color-1);
+    }
+    100% {
+        background-color: var(--base-color-4);
+    }
+}
+
+#result-panel {
+    width: calc(100% - var(--input-panel-width));
+}
+
+#title {
+    margin: max(2.5rem, 3vh) 0 3vh 0;
+    font-size: calc(1.55*var(--variable-body-font-size));
+}
+
+#upload-area {
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: var(--upload-area-width);
+    min-height: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+#upload-area.hover {
+    color: var(--dark-accent-color);
+    background-color: hsl(201, 89%, 80%);
+}
+
+#dragndrop-explainer-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4.5vh 0 3vh 0;
+}
+
+#dragndrop-explainer {
+    width: calc(0.55*var(--variable-widget-width));
+}
+
+#gallery {
+    display: flex;
+    justify-content: center;
+    gap: calc(0.2*var(--thumbnail-size));
+    flex-wrap: wrap;
+}
+
+.thumbnail {
+    width: var(--thumbnail-size);
+    height: var(--thumbnail-size);
+    object-fit: cover;
+    border: calc(0.04*var(--thumbnail-size)) solid #ddd;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+#uploaded-image-container {
+    width: 90%;
+    padding: 5%;
+}
+
+#uploaded-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 5%;
+    opacity: 60%;
+}
+
+#uploaded-image.animate {
+    animation: balloon-image calc(0.4*var(--default-animation-time)) forwards ease-in-out;
+}
+
+@keyframes balloon-image {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    39% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    40% {
+        opacity: 60%;
+        transform: scale(0.3);
+    }
+    100% {
+        opacity: 100%;
+        transform: scale(1);
+    }
+}
+
+.result {
+    margin-top: 20px;
+    font-size: calc(1.5*var(--variable-body-font-size));
+    font-weight: bold;
+    color: var(--dark-accent-color);
+}
+
+.error {
+    /* deprecated */
+    display: inline-block;
+}
+
+#loading-dot-supercontainer {
+    margin: 4vh 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loading-dot-container {
+    display: none;
+    /* Convert to flex in automation */
+    width: calc(0.2*var(--variable-widget-width));
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-dot {
+    flex: 1;
+    flex-shrink: 0;
+    flex-grow: 0;
+    /* In place of width */
+    flex-basis: var(--loading-dot-size);
+    height: var(--loading-dot-size);
+    border-radius: 50%;
+    background-color: var(--base-color-3);
+    margin: 0.3rem;
+    opacity: 0.5;
+}
+
+#loading-dot-1 {
+    animation: loading-dot-1-animation var(--total-loading-animation-time) infinite forwards ease-in-out;
+}
+
+#loading-dot-2 {
+    animation: loading-dot-2-animation var(--total-loading-animation-time) infinite forwards ease-in-out;
+}
+
+#loading-dot-3 {
+    animation: loading-dot-3-animation var(--total-loading-animation-time) infinite forwards ease-in-out;
+}
+
+@keyframes loading-dot-1-animation {
+    0% {
+        opacity: 0.5;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes loading-dot-2-animation {
+    15% {
+        opacity: 0.5;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    45% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes loading-dot-3-animation {
+    30% {
+        opacity: 0.5;
+    }
+
+    45% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0.5;
+    }
+}
+
+#copyright-notice-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--input-panel-width);
+    padding-left: calc(2*var(--main-div-padding));
+}
+
+#copyright-notice {
+    margin: 0;
+    font-family: 'kalam';
+    font-size: calc(0.8*var(--variable-body-font-size));
+    flex-shrink: 0;
+    color: black;
+}
