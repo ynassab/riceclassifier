@@ -11,7 +11,7 @@
 "use strict"
 
 const getDataAPIEndpoint = 'https://31rueu86eh.execute-api.us-east-1.amazonaws.com/';
-let classifyLock = false;
+let lockClassification = false;
 
 /**
  * Mapping of model output class indices to human-readable rice variety names.
@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     async function handleFile(input) {
         try {
-            if (classifyLock) return;
-            classifyLock = true;
+            if (lockClassification) return;
+            lockClassification = true;
 
             let base64Image;
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } finally {
             loadingDotContainer.style.display = 'none';
             inputPanel.classList.remove('animate');
-            classifyLock = false;
+            lockClassification = false;
         }
     }
 
@@ -244,7 +244,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 setTimeout(typeChunk, delayMilliseconds);
             } else {
-                classifyLock = false;
+                // Release generation lock when animation completes
+                lockGeneration = false;
             }
         }
 
