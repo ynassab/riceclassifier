@@ -1,8 +1,22 @@
+/**
+ * Rice Classifier Frontend
+ *
+ * Provides the frontend interface for the rice classifier web app. Handles user
+ * image uploads (via drag-and-drop or file selection), communicates with the backend,
+ * and displays classification results with animations.
+ *
+ * @author Yahia Nassab
+ */
+
 "use strict"
 
 const getDataAPIEndpoint = 'https://31rueu86eh.execute-api.us-east-1.amazonaws.com/';
 let classifyLock = false;
 
+/**
+ * Mapping of model output class indices to human-readable rice variety names.
+ * These correspond to the 5 rice grain classes that the CNN model was trained to identify.
+ */
 const predictedClassIdToName = new Map();
 predictedClassIdToName.set(0, 'Arborio');
 predictedClassIdToName.set(1, 'Basmati');
@@ -10,6 +24,9 @@ predictedClassIdToName.set(2, 'Ipsala');
 predictedClassIdToName.set(3, 'Jasmine');
 predictedClassIdToName.set(4, 'Karacadag');
 
+/**
+ * Main application initialization and event listener setup.
+ */
 document.addEventListener('DOMContentLoaded', async () => {
     const uploadArea = document.getElementById('upload-area');
     const fileInput = document.getElementById('file-input');
@@ -21,6 +38,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     resultDiv.textContent = '';  // Clear previous results
 
+    /**
+     * Convert a File object to a base64-encoded data URL string.
+     *
+     * @param {File} file - The File object to convert (typically from file input or drag-drop)
+     * @returns {Promise<string>} Promise that resolves to a base64 data URL string
+     *                            Format: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
+     *
+     */
     const toBase64 = (file) =>
         new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -29,6 +54,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             reader.readAsDataURL(file);
         });
 
+    /**
+     * Process and handle user image input for classification.
+     *
+     * This function serves as the main entry point for all image input methods
+     * (file upload, drag-and-drop). It validates the input, converts it to the
+     * appropriate format, updates the UI with loading states, and initiates
+     * the classification process.
+     *
+     * @param {File|string} input - Either a File object from user upload or a string URL
+     *                              from gallery drag-and-drop operations
+     *
+     */
     async function handleFile(input) {
         try {
             if (classifyLock) return;
@@ -78,6 +115,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    /**
+     * Update the displayed image in the UI with smooth animation effects.
+     *
+     * @param {string} base64Image - Base64-encoded image data URL to display
+     *                               Format: "data:image/jpeg;base64,..."
+     *
+     */
     function updateImage(base64Image) {
         uploadedImage.classList.remove('animate');
         uploadedImage.src = base64Image;
@@ -86,6 +130,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             uploadedImage.classList.add('animate');
         }, 0);
     }
+
+    // ===== Event Listeners for Drag and Drop Functionality =====
+
+    gallery.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.dataTransfer.setData('text/plain', e.target.src);
+        }
+    });
 
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -96,6 +148,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         uploadArea.classList.remove('hover');
     });
 
+    /**
+     * Processes both file drops and image URL drops from gallery.
+     */
     uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
         uploadArea.classList.remove('hover');
@@ -114,6 +169,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // ===== Event Listeners for File Upload Interface =====
+
     uploadArea.addEventListener('click', () => {
         fileInput.click();
     });
@@ -123,19 +180,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         handleFile(file);
     });
 
-    gallery.addEventListener('dragstart', (e) => {
-        if (e.target.tagName === 'IMG') {
-            e.dataTransfer.setData('text/plain', e.target.src);
-        }
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-        const src = e.dataTransfer.getData('text/plain');
-        if (src) {
-            updateImage(src);
-        }
-    });
-
+    /**
+     * Send processed image data to AWS Lambda function for rice grain classification.
+     *
+     * This function handles the HTTP communication with the backend CNN model,
+     * processes the response, and updates the UI with classification results.
+     *
+     * @param {string} base64Image - Base64-encoded image data (without data URL prefix)
+     *                               Should be pure base64 string without "data:image/...;base64," prefix
+     *
+     */
     async function sendImageToLambda(base64Image) {
         try {
             const response = await fetch(getDataAPIEndpoint, {
@@ -159,17 +213,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    /**
+     * Displays text with a typewriter animation effect.
+     *
+     * Characters are revealed progressively to create an engaging user experience
+     * when displaying generated abstracts. HTML content is periodically re-rendered
+     * to ensure proper display of tags and special characters.
+     *
+     * @param {HTMLElement} element - The DOM element to display the text in
+     * @param {string} text - The text content to display with typewriter effect
+     * @param {number} [delayMilliseconds=5] - Delay between each character in milliseconds
+     *
+     */
     function typewriterEffect(element, text, delayMilliseconds = 5) {
         let i = 0;
         let responseSoFar = '';
 
+        /**
+         * Internal recursive function that handles character-by-character text display.
+         * Releases the generation lock when complete.
+         */
         function typeChunk() {
             if (i < text.length) {
                 element.innerHTML += text[i];
                 responseSoFar += text[i];
                 i++;
+                // Periodically re-render HTML to ensure proper display
                 if (i % 25 === 0 || i === text.length) {
-                    // Every n characters, re-render HTML to ensure tags and special characters appear properly
                     element.innerHTML = responseSoFar;
                 }
                 setTimeout(typeChunk, delayMilliseconds);
