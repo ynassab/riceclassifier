@@ -1,3 +1,6 @@
+![Backend Tests](https://github.com/ynassab/riceclassifier/actions/workflows/backend_tests.yml/badge.svg)
+![Frontend Tests](https://github.com/ynassab/riceclassifier/actions/workflows/frontend_tests.yml/badge.svg)
+
 # Rice Classifier
 A machine learning model trained to classify images of grains of rice, hosted at https://yahianassab.com/riceclassifier.
 
