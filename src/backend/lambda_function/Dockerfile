@@ -1,11 +1,10 @@
 # Adapted from https://docs.aws.amazon.com/lambda/latest/dg/python-image.html
 
 ARG BUILD_DIR="build"
-ARG RUNTIME_VERSION="3.10"
 ARG TF_WHEEL_NAME="tensorflow-2.9.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 ARG PIL_WHEEL_NAME="Pillow-10.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 
-FROM public.ecr.aws/lambda/python:${RUNTIME_VERSION}
+FROM public.ecr.aws/lambda/python:3.10.2025.03.07.08-x86_64
 
 ARG BUILD_DIR
 ARG TF_WHEEL_NAME
@@ -16,6 +15,7 @@ COPY ${BUILD_DIR}/${TF_WHEEL_NAME} ${LAMBDA_TASK_ROOT}
 COPY ${BUILD_DIR}/${PIL_WHEEL_NAME} ${LAMBDA_TASK_ROOT}
 
 # Install the function's dependencies
+RUN pip install --no-cache-dir h5py==3.7.0
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir ${TF_WHEEL_NAME}
 RUN pip install --no-cache-dir ${PIL_WHEEL_NAME}
