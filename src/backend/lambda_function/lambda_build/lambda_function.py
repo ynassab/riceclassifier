@@ -37,7 +37,13 @@ def lambda_handler(event, context):
 
     Args:
         event (dict): AWS Lambda event object containing the HTTP request data.
-                      Expected structure:
+                      Expected structure (for Lambda warm-up calls):
+                      {
+                         "body": {
+                             "wakeUp": true
+                         }
+                      }
+                      Expected structure (for all usage within 15 minutes after a Lambda warm-up call):
                       {
                          "body": {
                              "image": "<base64-encoded image data>"
@@ -75,45 +81,60 @@ def lambda_handler(event, context):
         - Class 3: Jasmine
         - Class 4: Karacadag
     """
+    if not 'body' in event:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "No body in the request."})
+        }
+
+    # Ensure "event['body']" is a JSON string before parsing
+    body_content = event['body']
+    if isinstance(body_content, dict):
+        data = body_content  # already a dictionary, no need to parse
+    else:
+        data = json.loads(body_content)  # parse the JSON string
+
+    # Return blank response if request is a wake-up call
+    if 'wakeUp' in data:
+        return {
+            'statusCode': 200,
+            'body': json.dumps('Hello from Lambda!'),
+        }
+
     try:
         model = create_model()
         checkpoint_dir = 'model'
         checkpoint_path = os.path.join(checkpoint_dir, 'ckpt_5')
         model.load_weights(checkpoint_path)
 
-        if "body" in event:
-            body = event['body']
-            if isinstance(body, dict):
-                body = body
-            else:
-                body = json.loads(body)
-            image_data = body.get("image")  # Base64-encoded image
+        image_data = data.get("image")  # Base64-encoded image
 
-            if not image_data:
-                raise ValueError("No image provided in the request.")
-
-            decoded_image = Image.open(BytesIO(base64.b64decode(image_data)))
-            input_image = preprocess_image(decoded_image)
-
-            # Re-encode the decoded image for verification
-            buffered = BytesIO()
-            decoded_image.save(buffered, format="PNG")
-            re_encoded_image = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
-            predictions = model.predict(input_image)
-            predicted_class = int(np.argmax(predictions[0]))  # Class index with highest probability
-
-            response = {
-                "statusCode": 200,
-                "body": json.dumps({
-                    "predicted_class": predicted_class,
-                    "all_predictions": ', '.join([str(p) for p in predictions]),
-                    "re_encoded_image": re_encoded_image
-                    })
+        if not image_data:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"error": "No image provided in the request."})
             }
-            return response
-        else:
-            raise ValueError("No valid body in the request.")
+
+        decoded_image = Image.open(BytesIO(base64.b64decode(image_data)))
+        input_image = preprocess_image(decoded_image)
+
+        # Re-encode the decoded image for verification
+        buffered = BytesIO()
+        decoded_image.save(buffered, format="PNG")
+        re_encoded_image = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        predictions = model.predict(input_image)
+        predicted_class = int(np.argmax(predictions[0]))  # Class index with highest probability
+
+        response = {
+            "statusCode": 200,
+            "body": json.dumps({
+                "predicted_class": predicted_class,
+                "all_predictions": ', '.join([str(p) for p in predictions]),
+                "re_encoded_image": re_encoded_image
+                })
+        }
+        return response
 
     except Exception as e:
         return {
