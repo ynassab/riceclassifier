@@ -31,36 +31,43 @@
         </div>
         <div id="input-panel">
             <h1 id="title" class="phase-in">Rice Classifier</h1>
-            <div id="upload-area" class="phase-in">
-                <p>Drag and drop an image here or click to upload</p>
-                <input type="file" id="file-input" accept="image/*" style="display: none;">
+            <div id="loading-screen-container" class="phase-in-delay-1">
+                <div id="loading-screen-text-container">
+                    <p id="loading-screen-text">Awakening from deep sleep...</p>
+                </div>
             </div>
+            <div id="application-container">
+                <div id="upload-area" class="phase-in">
+                    <p>Drag and drop an image here or click to upload</p>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+                </div>
 
-            <div id="dragndrop-explainer-container" class="phase-in">
-                <p id="dragndrop-explainer">
-                    You may also drag and drop one of the images below into the upload area. If on mobile,
-                    you may wish to save one of the images below locally, then re-upload it.
-                </p>
-            </div>
+                <div id="dragndrop-explainer-container" class="phase-in">
+                    <p id="dragndrop-explainer">
+                        You may also drag and drop one of the images below into the upload area. If on mobile,
+                        you may wish to save one of the images below locally, then re-upload it.
+                    </p>
+                </div>
 
-            <div id="gallery" class="phase-in-delay-1">
-                <img src="index/pictures/rice/Arborio (1).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/basmati (1).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Ipsala (1).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Jasmine (1).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Karacadag (1).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Arborio (2).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/basmati (2).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Ipsala (2).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Jasmine (2).jpg" class="thumbnail" draggable="true">
-                <img src="index/pictures/rice/Karacadag (2).jpg" class="thumbnail" draggable="true">
-            </div>
+                <div id="gallery" class="phase-in-delay-1">
+                    <img src="index/pictures/rice/Arborio (1).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/basmati (1).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Ipsala (1).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Jasmine (1).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Karacadag (1).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Arborio (2).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/basmati (2).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Ipsala (2).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Jasmine (2).jpg" class="thumbnail" draggable="true">
+                    <img src="index/pictures/rice/Karacadag (2).jpg" class="thumbnail" draggable="true">
+                </div>
 
-            <div id="loading-dot-supercontainer">
-                <div id="loading-dot-container">
-                    <div class="loading-dot" id="loading-dot-1"></div>
-                    <div class="loading-dot" id="loading-dot-2"></div>
-                    <div class="loading-dot" id="loading-dot-3"></div>
+                <div id="loading-dot-supercontainer">
+                    <div id="loading-dot-container">
+                        <div class="loading-dot" id="loading-dot-1"></div>
+                        <div class="loading-dot" id="loading-dot-2"></div>
+                        <div class="loading-dot" id="loading-dot-3"></div>
+                    </div>
                 </div>
             </div>
         </div>

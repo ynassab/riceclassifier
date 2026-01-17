@@ -25,6 +25,46 @@ predictedClassIdToName.set(3, 'Jasmine');
 predictedClassIdToName.set(4, 'Karacadag');
 
 /**
+ * Awakens the backend server from deep sleep.
+ *
+ * Makes a POST request to the backend API to wake it up. If successful, the loading screen is hidden
+ * and the application container is displayed. If unsuccessful, an error message is shown on the loading screen.
+ *
+ * @returns {Promise<void>}
+ */
+async function awakenFromDeepSleep() {
+    const loadingScreenContainer = document.querySelector('#loading-screen-container');
+    const applicationContainer = document.querySelector('#application-container');
+
+    const response = await fetch(getDataAPIEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            wakeUp: 'Hello from Abstract Generator frontend!',
+        })
+    });
+    const { output } = await response.json();
+
+    if (!response.ok) {
+        console.error(`Error: response status of ${response.status}\n${JSON.stringify(output, null, 2)}`);
+        const loadingScreenText = document.querySelector('#loading-screen-text');
+        const loadingScreenContainer = document.querySelector('#loading-screen-container');
+
+        // Change loading screen message with a vanish and phase-in effect
+        loadingScreenContainer.classList.remove('show');
+        loadingScreenText.innerText = 'Unable to connect to the server. Please try again later.';
+        setTimeout(() => {
+            loadingScreenContainer.classList.add('show');
+        }, 100);
+    } else {
+        loadingScreenContainer.style.display = 'none';
+        applicationContainer.style.display = 'block';
+    }
+}
+
+/**
  * Convert a File object to a base64-encoded data URL string.
  *
  * @param {File} file - The File object to convert (typically from file input or drag-drop)
@@ -207,6 +247,8 @@ if (typeof module !== 'undefined') {
  * Main application initialization and event listener setup.
  */
 document.addEventListener('DOMContentLoaded', async () => {
+    await awakenFromDeepSleep();
+
     const uploadArea = document.getElementById('upload-area');
     const fileInput = document.getElementById('file-input');
     const gallery = document.getElementById('gallery');

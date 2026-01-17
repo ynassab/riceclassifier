@@ -81,6 +81,26 @@ main {
     min-height: 90%;
 }
 
+#loading-screen-container {
+    display: block;  /* Convert to none in automation */
+    margin: 0;
+    padding: 0;
+}
+
+#loading-screen-text-container {
+    padding: 1rem;
+}
+
+#loading-screen-text {
+    font-size: calc(1.2*var(--variable-body-font-size));
+}
+
+#application-container {
+    display: none;  /* Convert to block in automation */
+    margin: 0;
+    padding: 0;
+}
+
 #input-panel {
     width: var(--input-panel-width);
     background-color: var(--base-color-1);
