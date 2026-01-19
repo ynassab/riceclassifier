@@ -62,7 +62,7 @@ class TestLambdaHandler(unittest.TestCase):
         event = {}
         response = lambda_function.lambda_handler(event, None)
 
-        assert response["statusCode"] == 500
+        assert response["statusCode"] == 400
         body = json.loads(response["body"])
         assert "error" in body
 
@@ -74,7 +74,7 @@ class TestLambdaHandler(unittest.TestCase):
         }
         response = lambda_function.lambda_handler(event, None)
 
-        assert response["statusCode"] == 500
+        assert response["statusCode"] == 400
         body = json.loads(response["body"])
         assert "error" in body
         assert "No image" in body["error"]
